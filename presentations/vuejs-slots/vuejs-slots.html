@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <title>reveal.js</title>
+
+        <link rel="stylesheet" href="../../node_modules/reveal.js/dist/reset.css" />
+        <link rel="stylesheet" href="../../node_modules/reveal.js/dist/reveal.css" />
+        <link rel="stylesheet" href="../../node_modules/reveal.js/dist/theme/black.css" id="theme" />
+
+        <!-- Theme used for syntax highlighted code -->
+        <link rel="stylesheet" href="../../node_modules/reveal.js/plugin/highlight/monokai.css" id="highlight-theme" />
+
+        <!-- my styles -->
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <section>
+                        <img src="./logo.png" alt="VueJS Logo" style="width: 300px" />
+                        <h3 style="text-transform: none">VueJS Slots</h3>
+                    </section>
+
+                    <section>
+                        <!-- Second Slide-->
+                        <section>
+                            Slots Basics
+                            <div style="display: inline-flex; flex-direction: row; align-content: stretch">
+                                <div style="width: 100%">
+                                    Child Component
+                                    <section data-markdown>
+                                        <textarea data-template>
+                                            ```vuejs [0|5]
+                                            <!-- @/ChildComponent.vue -->
+                                            
+                                            <template>
+                                                <span>
+                                                    <slot></slot>
+                                                </span>
+                                            </template>
+                                            <script>
+                                            export default {
+                                                name: 'ChildComponent',
+                                            }
+                                            </script>
+                                            ```
+                                        </textarea>
+                                    </section>
+                                </div>
+                                <div style="width: 100%">
+                                    Parent Component
+                                    <div data-markdown>
+                                        <textarea data-template>
+                                            ```vuejs [0|4-7]
+                                            <!-- @/ParentComponent.vue -->
+
+                                            <template>
+                                                <child-component>
+                                                    Slot Content 
+                                                    <!-- or some HTML/Components -->
+                                                </child-component>
+                                            </template>
+                                            <script>
+                                            import ChildComponent from './ChildComponent'
+                                            export default {
+                                                name: 'ParentComponent',
+                                                components: {
+                                                    ChildComponent,
+                                                }
+                                            }
+                                            </script>
+                                            ```
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+                <section>
+                    Rendered HTML
+                    <span data-markdown>
+                        <textarea data-template>
+                            ```html [0]
+                            <span>
+                                Slot Content
+                            </span>
+                            ```
+                        </textarea>
+                    </span>
+                </section>
+                <section>
+                    <section>
+                        Named Slots
+                        <div style="display: inline-flex; flex-direction: row; align-content: stretch">
+                            <div style="width: 100%">
+                                Child Component
+                                <section data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|5-11]
+                                        <!-- @/ChildComponent.vue -->
+                                        
+                                        <template>
+                                            <div>
+                                            <header>
+                                                <slot name="header"></slot>
+                                            </header>
+                                            <main>
+                                                <slot name="default"></slot> 
+                                                <!-- or <slot></slot> -->
+                                            </main>
+                                            </div>
+                                        </template>
+                                        <script>
+                                        export default {
+                                            name: 'Child Component',
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </section>
+                            </div>
+                            <div style="width: 100%">
+                                Parent Component
+                                <div data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|4-12]
+                                        <!-- @/ParentComponent.vue -->
+
+                                        <template>
+                                        <child-component>
+                                            <span v-slot:header>
+                                                Header 
+                                            </span> 
+                                            <span #default>
+                                                Main Content
+                                            </span>
+                                            <!-- or <span>Main Content</span> -->
+                                        </child-component>
+                                        </template>
+                                        <script>
+                                        import ChildComponent from './ChildComponent'
+                                        export default {
+                                            name: 'ParentComponent',
+                                            components: {
+                                                ChildComponent,
+                                            }
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        Problems With Normal Slots
+                        <div style="display: inline-flex; flex-direction: row; align-content: stretch">
+                            <div style="width: 100%">
+                                Product Component
+                                <section data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|4-6,11-18]
+                                        <!-- @/ProductCard.vue (Child Component) -->
+                                        
+                                        <template>
+                                            <slot>
+                                                {{ product.name }}
+                                            </slot>
+                                        </template>
+                                        <script>
+                                        export default {
+                                            name: 'ProductComponent',
+                                            data: () => {
+                                                return {
+                                                    product: { 
+                                                        name: 'Kartoffeln',
+                                                        en_name: 'Potatoes'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </section>
+                            </div>
+                            <div style="width: 100%">
+                                Parent Component
+                                <div data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|4-7]
+                                        <!-- @/ParentComponent.vue -->
+
+                                        <template>
+                                            <product-component>
+                                                <!-- won't work-->
+                                                {{ product.en_name }}
+                                            </product-component>
+                                        </template>
+                                        <script>
+                                        import ProductComponent from './ProductComponent'
+                                        export default {
+                                            name: 'ParentComponent',
+                                            components: {
+                                                ProductComponent,
+                                            }
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        Solution : Scoped Slots
+                        <div style="display: inline-flex; flex-direction: row; align-content: stretch">
+                            <div style="width: 100%">
+                                Product Component
+                                <section data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|4-6,11-18]
+                                        <!-- @/ProductCard.vue (Child Component) -->
+                                        
+                                        <template>
+                                            <slot name="default" v-bind:product="product">
+                                                {{ product.name }}
+                                            </slot>
+                                        </template>
+                                        <script>
+                                        export default {
+                                            name: 'ProductComponent',
+                                            data: () => {
+                                                return {
+                                                    product: { 
+                                                        name: 'Kartoffeln',
+                                                        en_name: 'Potatoes'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </section>
+                            </div>
+                            <div style="width: 100%">
+                                Parent Component
+                                <div data-markdown>
+                                    <textarea data-template>
+                                        ```vuejs [0|4-7]
+                                        <!-- @/ParentComponent.vue -->
+
+                                        <template>
+                                            <product-component v-slot:default="{ product }">
+                                            <!-- or v-slot="{ product }" -->
+                                                {{ product.en_name }}
+                                            </product-component>
+                                        </template>
+                                        <script>
+                                        import ProductComponent from './ProductComponent'
+                                        export default {
+                                            name: 'ParentComponent',
+                                            components: {
+                                                ProductComponent,
+                                            }
+                                        }
+                                        </script>
+                                        ```
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        &lt;Thank You /&gt;
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="../../node_modules/reveal.js/dist/reveal.js"></script>
+        <script src="../../node_modules/reveal.js/plugin/notes/notes.js"></script>
+        <script src="../../node_modules/reveal.js/plugin/markdown/markdown.js"></script>
+        <script src="../../node_modules/reveal.js/plugin/highlight/highlight.js"></script>
+        <script>
+            // More info about initialization & config:
+            // - https://revealjs.com/initialization/
+            // - https://revealjs.com/config/
+            Reveal.initialize({
+                hash: true,
+
+                // Learn about plugins: https://revealjs.com/plugins/
+                plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+            });
+        </script>
+    </body>
+</html>

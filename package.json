@@ -1,0 +1,26 @@
+{
+  "name": "presentations",
+  "version": "0.0.1",
+  "description": "All my presentations",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sereneinserenade/presentations.git"
+  },
+  "keywords": [
+    "presentations",
+    "revealjs"
+  ],
+  "author": "Jeet Mandaliya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sereneinserenade/presentations/issues"
+  },
+  "homepage": "https://github.com/sereneinserenade/presentations#readme",
+  "dependencies": {
+    "reveal.js": "^4.0.2"
+  }
+}
